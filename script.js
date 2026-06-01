@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!track || !prevBtn || !nextBtn) return;
   
   let currentIndex = 0;
+  const cards = track.querySelectorAll('.trusted-card');
+  const maxIndex = cards.length > 0 ? cards.length - 1 : 0;
   
   function getSlideDistance() {
     const width = window.innerWidth;
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       prevBtn.removeAttribute('disabled');
     }
     
-    if (currentIndex === 1) {
+    if (currentIndex === maxIndex) {
       nextBtn.setAttribute('disabled', 'true');
     } else {
       nextBtn.removeAttribute('disabled');
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   nextBtn.addEventListener('click', () => {
-    if (currentIndex < 1) {
+    if (currentIndex < maxIndex) {
       currentIndex++;
       updateSlider();
     }
@@ -462,4 +464,27 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // Testimonials "Read more" / "See less" Expandable Logic
+  const readMoreLinks = document.querySelectorAll('.trusted-read-more');
+  
+  readMoreLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      const textBlock = link.closest('.trusted-text-block');
+      if (!textBlock) return;
+      
+      const desc = textBlock.querySelector('.trusted-quote-desc');
+      if (!desc) return;
+      
+      desc.classList.toggle('expanded');
+      
+      if (desc.classList.contains('expanded')) {
+        link.textContent = 'See less';
+      } else {
+        link.textContent = 'Read more';
+      }
+    });
+  });
 });
